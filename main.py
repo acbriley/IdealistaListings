@@ -24,9 +24,12 @@ def get_oauth_token():
     return r.text
 
 
+url = 'https://api.idealista.com/3.5/es/search?center=41.387471,2.169743&country=es&maxItems=500&distance=3000&propertyType=homes&operation=sale&minSize=60&bedrooms=2&numPage=1'
+
 # Search Idealista API using parameters
-def search(token):
-    url = 'https://api.idealista.com/3.5/es/search?center=41.387471,2.169743&country=es&maxItems=500&numPage=(1,2,3,4,5,6,7,8,9,10)&distance=452&propertyType=homes&operation=sale&minSize=60&bedrooms=2'
+
+
+def search(url, token):
     headers = {"Authorization": "Bearer " + token}
     r = requests.post(url, headers=headers)
     # print(r.text)
@@ -37,7 +40,7 @@ token_json = get_oauth_token()
 token_resp = json.loads(token_json)
 access_token = token_resp["access_token"]
 
-search_json = search(access_token)
+search_json = search(url, access_token)
 search_resp = json.loads(search_json)
 search_list = search_resp['elementList']
 
@@ -51,8 +54,9 @@ df = pd.DataFrame(search_list)
 df.index = df.index + 1
 
 # clean data by dropping unwatned columns
-to_drop = ['has360', 'hasPlan', 'labels', 'suggestedTexts', 'status', 'description', 'showAddress', 'topNewDevelopment', 'superTopHighlight', 'hasStaging', 'propertyCode', 'numPhotos', 'externalReference', 'operation', 'province', 'country',
-           'latitude', 'longitude', 'distance', 'hasVideo', 'newDevelopment', 'detailedType', 'has3DTour', 'municipality', 'topNewDevelopment', 'superTopHighlight']
+to_drop = ['has360', 'hasPlan', 'suggestedTexts', 'status', 'description', 'showAddress', 'topNewDevelopment', 'superTopHighlight', 'hasStaging', 'propertyCode', 'numPhotos', 'externalReference', 'operation', 'province', 'country',
+           'distance', 'hasVideo', 'newDevelopment', 'detailedType', 'has3DTour', 'municipality', 'topNewDevelopment', 'superTopHighlight']
 
 df.drop(columns=to_drop, inplace=True, axis=1)
-df.to_excel('data.xlsx', index=True)
+
+df.to_excel('./data/data.xlsx', index=True)
