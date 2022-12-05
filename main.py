@@ -51,24 +51,24 @@ for i in range(1, 6):
     search_json = search(url, access_token)
     search_resp = json.loads(search_json)
     search_list.append(search_resp['elementList'])
-print(len(search_list))
 
+results = []
 for i in search_list:
     for item in i:
-        pass
+        results.append(item)
 
 # dump json data into a json file
 with open("data/idealista_json_" + time.strftime("%Y-%m-%d") + ".json", 'w') as export:
-    json.dump(search_list, export)
+    json.dump(results, export)
 
 # turn search list into an excel file indexed at 1
-df = pd.DataFrame(search_list)
+df = pd.DataFrame(results)
 df.index = df.index + 1
 
 # clean data by dropping unwatned columns
-# to_drop = ['has360', 'hasPlan', 'suggestedTexts', 'status', 'description', 'showAddress', 'topNewDevelopment', 'superTopHighlight', 'hasStaging', 'propertyCode', 'numPhotos', 'externalReference', 'operation', 'province', 'country',
-#            'distance', 'hasVideo', 'newDevelopment', 'detailedType', 'has3DTour', 'municipality', 'topNewDevelopment', 'superTopHighlight']
+to_drop = ['has360', 'hasPlan', 'suggestedTexts', 'status', 'description', 'showAddress', 'topNewDevelopment', 'superTopHighlight', 'hasStaging', 'propertyCode', 'numPhotos', 'externalReference', 'operation', 'province', 'country',
+           'distance', 'hasVideo', 'newDevelopment', 'detailedType', 'has3DTour', 'municipality', 'topNewDevelopment', 'superTopHighlight']
 
-# df.drop(columns=to_drop, inplace=True, axis=1)
+df.drop(columns=to_drop, inplace=True, axis=1)
 
 df.to_excel('./data/data.xlsx', index=True)
