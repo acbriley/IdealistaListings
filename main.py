@@ -51,6 +51,11 @@ for i in range(1, 6):
     search_json = search(url, access_token)
     search_resp = json.loads(search_json)
     search_list.append(search_resp['elementList'])
+print(len(search_list))
+
+for i in search_list:
+    for item in i:
+        pass
 
 # dump json data into a json file
 with open("data/idealista_json_" + time.strftime("%Y-%m-%d") + ".json", 'w') as export:
