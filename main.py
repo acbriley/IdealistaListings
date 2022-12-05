@@ -32,7 +32,7 @@ url = 'https://api.idealista.com/3.5/es/search?center=41.387471,2.169743&country
 def search(url, token):
     headers = {"Authorization": "Bearer " + token}
     r = requests.post(url, headers=headers)
-    # print(r.text)
+
     return r.text
 
 
@@ -40,9 +40,6 @@ token_json = get_oauth_token()
 token_resp = json.loads(token_json)
 access_token = token_resp["access_token"]
 
-# search_json = search(url, access_token)
-# search_resp = json.loads(search_json)
-# search_list = search_resp['elementList']
 
 search_list = []
 for i in range(1, 6):
@@ -52,6 +49,10 @@ for i in range(1, 6):
     search_resp = json.loads(search_json)
     search_list.append(search_resp['elementList'])
 
+results = []
+for i in search_list:
+    for item in i:
+        results.append(item)
 
 # dump json data into a json file
 with open("data/idealista_json_" + time.strftime("%Y-%m-%d") + ".json", 'w') as export:
