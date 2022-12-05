@@ -44,7 +44,6 @@ search_json = search(url, access_token)
 search_resp = json.loads(search_json)
 search_list = search_resp['elementList']
 
-
 # dump json data into a json file
 with open("data/idealista_json_" + time.strftime("%Y-%m-%d") + ".json", 'w') as export:
     json.dump(search_list, export)
